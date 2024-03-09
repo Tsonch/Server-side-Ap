@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +16,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::group(['prefix' => 'info'], function() {
+    Route::get('/server', [UserController::class, 'getPhpInfo']);
+    Route::get('/client', [UserController::class, 'getClientInfo']);
+    Route::get('/database', [UserController::class, 'getDatabaseInfo']);
 });
