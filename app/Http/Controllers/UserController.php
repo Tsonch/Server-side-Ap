@@ -24,11 +24,19 @@ class UserController extends Controller
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }
 
-        $userTokenCount = $user->tokens()->count();
+        if (env('MAX_ACTIVE_TOKENS') == 0) {
+            return response()->json([
+                'message' => 'change env MAX_ACTIVE_TOKENS'
+            ], 401);
+        }
 
-        if ($userTokenCount >= env('MAX_ACTIVE_TOKENS', 3)) {
-            $oldestToken = $user->tokens()->oldest()->first();
+        $userActiveTokens = $user->tokens()->where('revoked', false);
+        $userTokenCount = $userActiveTokens->count();
+
+        while ($userTokenCount >= env('MAX_ACTIVE_TOKENS', 3)) {
+            $oldestToken = $userActiveTokens->orderBy('created_at', 'asc')->first();
             $oldestToken->revoke();
+            $userTokenCount = $user->tokens()->where('revoked', false)->count();
         }
 
         $tokenResult = $user->createToken('Personal Access Token');
