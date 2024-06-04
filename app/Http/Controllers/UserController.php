@@ -24,7 +24,7 @@ class UserController extends Controller
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }
 
-        if (env('MAX_ACTIVE_TOKENS') == 0) {
+        if (intval(env('MAX_ACTIVE_TOKENS')) <= 0) {
             return response()->json([
                 'message' => 'change env MAX_ACTIVE_TOKENS'
             ], 401);
