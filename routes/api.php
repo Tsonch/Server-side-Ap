@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\AuthCheck;
@@ -32,4 +33,18 @@ Route::prefix('auth')->group(function () {
 
         Route::post('out_all', [UserController::class, "outAll"]);
     });
+});
+
+Route::prefix('ref')->group(function () {
+
+    Route::prefix('policy/role')->group(function () {
+        Route::get('/', [RoleController::class, "getRoles"]);
+        Route::get('/{id}');
+        Route::post('/');
+        Route::put('/{id}');
+        Route::delete('/{id}');
+        Route::delete('/{id}/soft');
+        Route::post('/{id}/restore');
+    });
+
 });
