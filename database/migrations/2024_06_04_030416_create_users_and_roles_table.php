@@ -24,8 +24,8 @@ return new class extends Migration
             $table->index('user_id', 'users_and_roles_user_idx');
             $table->index('role_id', 'users_and_roles_role_idx');
 
-            $table->foreign('user_id', 'users_and_roles_user_fk')->on('users')->references('id');
-            $table->foreign('role_id', 'users_and_roles_role_fk')->on('roles')->references('id');
+            $table->foreign('user_id', 'users_and_roles_user_fk')->on('users')->references('id')->onDelete('cascade');
+            $table->foreign('role_id', 'users_and_roles_role_fk')->on('roles')->references('id')->onDelete('cascade');
         });
     }
 

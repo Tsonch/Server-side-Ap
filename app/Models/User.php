@@ -43,4 +43,15 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function roles() {
+        $user_id = $this->id;
+
+        $roles_id = UsersAndRoles::select('role_id')->where('user_id', $user_id)->get();
+
+        $roles = $roles_id->map(function($id) {
+            return Roles::where('id', $id->role_id)->first();
+        });
+        return $roles;
+    }
 }

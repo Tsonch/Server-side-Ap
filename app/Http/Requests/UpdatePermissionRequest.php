@@ -2,11 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\DTO\RoleDTO;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 
-class CreateRoleRequest extends FormRequest
+class UpdatePermissionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,18 +25,7 @@ class CreateRoleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|unique:Roles',
-            'encryption' => 'required|unique:Roles',
+            //
         ];
-    }
-
-    public function createDTO():RoleDTO {
-        return new RoleDTO(
-            $this->input('name'),
-            $this->input('description'),
-            $this->input('encryption'),
-            $this->input('created_by'),
-            $this->input('deleted_by'),
-        );
     }
 }

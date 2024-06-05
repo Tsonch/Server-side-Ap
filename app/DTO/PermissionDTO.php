@@ -1,7 +1,7 @@
-<?php 
+<?php
     namespace app\DTO;
 
-    class RoleDTO {
+    class PermissionDTO {
         public $name;
         public $description;
         public $encryption;

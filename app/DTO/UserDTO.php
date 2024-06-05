@@ -8,6 +8,8 @@
         public $email;
         public $dateOfBirth;
         public $created_at;
+        public $roles;
+        public $permissions;
 
         public function __construct($id, $username, $email, $dateOfBirth, $created_at) 
         {

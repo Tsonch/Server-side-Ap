@@ -2,8 +2,6 @@
 
 namespace app\DTO;
 
-use Illuminate\Support\Collection;
-use app\Models\Roles;
 use app\DTO\RoleDTO;
 
 class RolesCollectionDTO
