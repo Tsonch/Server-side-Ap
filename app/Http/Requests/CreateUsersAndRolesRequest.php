@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\DTO\UsersAndRolesDTO;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class CreateUsersAndRolesRequest extends FormRequest
 {

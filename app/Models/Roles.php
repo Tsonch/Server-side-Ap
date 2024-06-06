@@ -15,7 +15,8 @@ class Roles extends Model
         'description',
         'encryption',
         'created_by',
-        'deleted_by'
+        'deleted_by',
+        'deleted_at'
     ];
 
     public function permissions() {

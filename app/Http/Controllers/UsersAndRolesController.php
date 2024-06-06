@@ -15,7 +15,8 @@ class UsersAndRolesController extends Controller
 
         $role_id = $request->input('role_id');
 
-        $have_role = UsersAndRoles::where('user_id', $user_id)->where('role_id', $role_id);
+        $have_role = UsersAndRoles::where('user_id', $user_id)->where('role_id', $role_id)->first();
+
         if($have_role) {
             return response()->json(['error' => 'The user already has such a role']);
         }
@@ -45,8 +46,8 @@ class UsersAndRolesController extends Controller
 
         $user_role = UsersAndRoles::where('user_id', $user_id)->where('role_id', $role_id);
         $user_role->deleted_by = $request->user()->id;
+        $user_role->delete();
         $user_role->save();
-        $user_role->delete;
 
         return response()->json(['status' => '200']);
     }
@@ -59,7 +60,7 @@ class UsersAndRolesController extends Controller
 
         $user_role->restore();
         $user_role->deleted_by = null;
-        $user_role->save;
+        $user_role->save();
 
         return response()->json(['status' => '200']);
     }

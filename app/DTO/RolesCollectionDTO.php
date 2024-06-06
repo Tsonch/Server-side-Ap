@@ -2,7 +2,7 @@
 
 namespace app\DTO;
 
-use app\DTO\RoleDTO;
+use App\DTO\RoleDTO;
 
 class RolesCollectionDTO
 {

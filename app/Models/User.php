@@ -52,6 +52,7 @@ class User extends Authenticatable
         $roles = $roles_id->map(function($id) {
             return Roles::where('id', $id->role_id)->first();
         });
+
         return $roles;
     }
 }

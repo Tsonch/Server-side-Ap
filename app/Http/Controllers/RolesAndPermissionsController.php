@@ -25,9 +25,9 @@ class RolesAndPermissionsController extends Controller
     public function assignPermissionToRole(CreateRolesAndPermissionsRequest $request) {
         $role_id = $request->id;
 
-        $permission_id = $request->input('permission_id');
+        $permission_id = $request->permission_id;
 
-        $have_permission = RolesAndPermissions::where('role_id', $role_id)->where('permission_id', $permission_id);
+        $have_permission = RolesAndPermissions::where('role_id', $role_id)->where('permission_id', $permission_id)->first();
         if($have_permission) {
             return response()->json(['error' => 'The role already has such a permission']);
         }
@@ -45,7 +45,7 @@ class RolesAndPermissionsController extends Controller
         $role_id = $request->id;
         $permission_id = $request->permission_id;
 
-        $user_role = RolesAndPermissions::withTrashed()->where('role_id', $role_id)->where('permission_id', $permission_id);
+        $user_role = RolesAndPermissions::withTrashed()->where('role_id', $role_id)->where('permission_id', $permission_id)->first();
         $user_role->forceDelete();
 
         return response()->json(['status' => '200']);
@@ -55,10 +55,10 @@ class RolesAndPermissionsController extends Controller
         $role_id = $request->id;
         $permission_id = $request->permission_id;
 
-        $role_permission = RolesAndPermissions::where('role_id', $role_id)->where('permission_id', $permission_id);
+        $role_permission = RolesAndPermissions::where('role_id', $role_id)->where('permission_id', $permission_id)->first();
         $role_permission->deleted_by = $request->user()->id;
+        $role_permission->delete();
         $role_permission->save();
-        $role_permission->delete;
 
         return response()->json(['status' => '200']);
     }
@@ -67,11 +67,11 @@ class RolesAndPermissionsController extends Controller
         $role_id = $request->id;
         $permission_id = $request->permission_id;
 
-        $role_permission = RolesAndPermissions::where('role_id', $role_id)->where('permission_id', $permission_id);
+        $role_permission = RolesAndPermissions::where('role_id', $role_id)->where('permission_id', $permission_id)->first();
 
         $role_permission->restore();
         $role_permission->deleted_by = null;
-        $role_permission->save;
+        $role_permission->save();
 
         return response()->json(['status' => '200']);
     }

@@ -14,18 +14,12 @@ return new class extends Migration
         Schema::create('users_and_roles', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('role_id');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('role_id')->constrained()->onDelete('cascade');
             $table->timestamps();
             $table->integer('created_by');
-            $table->dateTime('deleted_at')->nullable();
+            $table->softDeletes();
             $table->integer('deleted_by')->nullable();
-
-            $table->index('user_id', 'users_and_roles_user_idx');
-            $table->index('role_id', 'users_and_roles_role_idx');
-
-            $table->foreign('user_id', 'users_and_roles_user_fk')->on('users')->references('id')->onDelete('cascade');
-            $table->foreign('role_id', 'users_and_roles_role_fk')->on('roles')->references('id')->onDelete('cascade');
         });
     }
 

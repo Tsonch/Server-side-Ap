@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use app\DTO\PermissionsCollectionDTO;
+use App\DTO\PermissionsCollectionDTO;
 use App\Http\Requests\CreatePermissionRequest;
 use App\Http\Requests\UpdatePermissionRequest;
 use App\Models\Permissions;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PermissionController extends Controller
 {
@@ -21,14 +22,14 @@ class PermissionController extends Controller
     }
 
     public function createPermission(CreatePermissionRequest $request) {
-        $user = $request->user;
+        $user = Auth::id();
         $permission_data = $request->createDTO();
 
         $new_permission = Permissions::create([
             'name' => $permission_data->name,
             'description' => $permission_data->description,
             'encryption' => $permission_data->encryption,
-            'created_by' => $user->id
+            'created_by' => $user
         ]);
 
         return response()->json($new_permission);
@@ -58,8 +59,8 @@ class PermissionController extends Controller
         $user = $request->user()->id;
 
         $permission->deleted_by = $user;
+        $permission->delete();
         $permission->save();
-        $permission->delete;
 
         return response()->json(['status' => '200']);
     }
@@ -69,7 +70,7 @@ class PermissionController extends Controller
 
         $permission->restore();
         $permission->deleted_by = null;
-        $permission->save;
+        $permission->save();
 
         return response()->json(['status' => '200']);
     }

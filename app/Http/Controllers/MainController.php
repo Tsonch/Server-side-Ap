@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Laravel\Passport\Passport;
 use Laravel\Passport\Token;
 use App\DTO\UserDTO;
+use App\Models\UsersAndRoles;
 use Carbon\Carbon;
 
 class MainController extends Controller
@@ -59,6 +60,12 @@ class MainController extends Controller
             'email' => $userData->email,
             'password' => bcrypt($userData->password),
             'birthday' => $userData->birthday
+        ]);
+
+        UsersAndRoles::create([
+            'user_id' => $user->id,
+            'role_id' => '3',
+            'created_by' => '1'
         ]);
 
         return response()->json($user, 201);

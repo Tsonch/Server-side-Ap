@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\DTO\RolesCollectionDTO;
 use App\Http\Requests\CreateRoleRequest;
 use App\Http\Requests\UpdateRoleRequest;
+use Illuminate\Support\Facades\Auth;
 
 class RoleController extends Controller
 {
@@ -21,14 +22,14 @@ class RoleController extends Controller
     }
 
     public function createRole(CreateRoleRequest $request) {
-        $user = $request->user;
+        $user = Auth::id();
         $role_data = $request->createDTO();
 
         $new_role = Roles::create([
             'name' => $role_data->name,
             'description' => $role_data->description,
             'encryption' => $role_data->encryption,
-            'created_by' => $user->id
+            'created_by' => $user
         ]);
 
         return response()->json($new_role);
@@ -36,7 +37,6 @@ class RoleController extends Controller
 
     public function updateRole(UpdateRoleRequest $request){
         $role = Roles::find($request->id);
-        dd($role);
 
         $role->update([
             'name' => $request->input('name'),
@@ -72,8 +72,8 @@ class RoleController extends Controller
         $user = $request->user()->id;
 
         $role->deleted_by = $user;
+        $role->delete();
         $role->save();
-        $role->delete;
 
         return response()->json(['status' => '200']);
     }
@@ -83,7 +83,7 @@ class RoleController extends Controller
 
         $role->restore();
         $role->deleted_by = null;
-        $role->save;
+        $role->save();
 
         return response()->json(['status' => '200']);
     }

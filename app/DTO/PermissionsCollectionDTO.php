@@ -2,7 +2,7 @@
 
     namespace app\DTO;
 
-    use app\DTO\PermissionDTO;
+    use App\DTO\PermissionDTO;
 
     class PermissionsCollectionDTO
     {
