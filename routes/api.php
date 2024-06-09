@@ -75,9 +75,12 @@ Route::prefix('ref')->group(function () {
         Route::get('/', [UserController::class, "getUsers"])->middleware('CheckRole:get-list-user');
         Route::get('/{id}/role', [UserController::class, "getUserRoles"])->middleware('CheckRole:read-user');
         Route::post('/{id}/role', [UsersAndRolesController::class, "assignRoleToUser"])->middleware('CheckRole:read-user');
+        Route::put('updateUser', [UserController::class, 'updateUser'])->middleware('CheckRole:update-user');
+        Route::put('{id}/changeUserRole', [UserController::class, 'changeUserRole'])->middleware('CheckRole:update-user');
         Route::delete('/{id}/role/{role_id}', [UsersAndRolesController::class, "hardDeleteUserRole"])->middleware('CheckRole:delete-user');
         Route::delete('/{id}/role/{role_id}/soft', [UsersAndRolesController::class, "softDeleteUserRole"])->middleware('CheckRole:delete-user');
         Route::post('/{id}/role/{role_id}/restore', [UsersAndRolesController::class, "restoreDeletedUserRole"])->middleware('CheckRole:delete-user');
-
+        Route::put('{id}/changeUserRole', [UserController::class, 'changeUserRole'])->middleware('CheckRole:update-user');
+        Route::put('updateUser', [UserController::class, 'updateUser'])->middleware('CheckRole:read-user');
     });
 });
