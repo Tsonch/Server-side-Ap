@@ -1,7 +1,7 @@
 <?php 
     namespace app\DTO;
 
-    use app\DTO\UserDTO;
+    use App\DTO\UserDTO;
     use App\Models\User;
 
     class UserCollectionDTO {

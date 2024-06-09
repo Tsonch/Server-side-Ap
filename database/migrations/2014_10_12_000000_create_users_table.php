@@ -20,6 +20,7 @@ return new class extends Migration
             $table->dateTime('birthday');
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

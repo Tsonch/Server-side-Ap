@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use app\DTO\UserCollectionDTO;
-use App\Http\Requests\Auth;
+use App\DTO\UserCollectionDTO;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\UserRequest;
 use App\Models\Roles;
 use App\Models\User;
 use App\Models\UsersAndRoles;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redis;
 
