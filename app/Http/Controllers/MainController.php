@@ -12,6 +12,8 @@ use Laravel\Passport\Token;
 use App\DTO\UserDTO;
 use App\Models\UsersAndRoles;
 use Carbon\Carbon;
+use Error;
+use Illuminate\Support\Facades\DB;
 
 class MainController extends Controller
 {
@@ -52,23 +54,34 @@ class MainController extends Controller
 
     public function registration(Registration $request)
     {
+        try {
+            DB::beginTransaction();
 
-        $userData = $request->createDTO();
+            $userData = $request->createDTO();
 
-        $user = User::create([
-            'username' => $userData->username,
-            'email' => $userData->email,
-            'password' => bcrypt($userData->password),
-            'birthday' => $userData->birthday
-        ]);
+            $user = User::create([
+                'username' => $userData->username,
+                'email' => $userData->email,
+                'password' => bcrypt($userData->password),
+                'birthday' => $userData->birthday
+            ]);
+    
+            UsersAndRoles::create([
+                'user_id' => $user->id,
+                'role_id' => '3',
+                'created_by' => '1'
+            ]);
+            $Log = new LogsController;
+            $Log->createLogs('users', 'registration', $user->id, null, $user, $user->id);
 
-        UsersAndRoles::create([
-            'user_id' => $user->id,
-            'role_id' => '3',
-            'created_by' => '1'
-        ]);
-
-        return response()->json($user, 201);
+            DB::commit();
+    
+            return response()->json($user, 201);
+        }
+        catch (\Exception $err) {
+            DB::rollback();
+            throw $err;
+        }
     }
 
     public function me(Request $request)

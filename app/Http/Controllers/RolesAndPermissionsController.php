@@ -7,6 +7,8 @@ use App\Http\Requests\UpdateRolesAndPermissionsRequest;
 use App\Models\Permissions;
 use App\Models\RolesAndPermissions;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class RolesAndPermissionsController extends Controller
 {
@@ -24,6 +26,7 @@ class RolesAndPermissionsController extends Controller
 
     public function assignPermissionToRole(CreateRolesAndPermissionsRequest $request) {
         $role_id = $request->id;
+        $user = Auth::id();
 
         $permission_id = $request->permission_id;
 
@@ -32,47 +35,105 @@ class RolesAndPermissionsController extends Controller
             return response()->json(['error' => 'The role already has such a permission']);
         }
 
-        RolesAndPermissions::create([
-            'role_id' => $role_id,
-            'permission_id' => $permission_id,
-            'created_by' => $request->user()->id
-        ]);
+        try {
+            DB::beginTransaction();
 
-        return response()->json(['status' => '200']);
+            $RAP = RolesAndPermissions::create([
+                'role_id' => $role_id,
+                'permission_id' => $permission_id,
+                'created_by' => $request->user()->id
+            ]);
+
+            $Log = new LogsController;
+            $Log->createLogs('roles_and_permissions', 'create', $RAP->id, null, $RAP, $user);
+
+            DB::commit();
+
+            return response()->json(['status' => '200']);
+        }
+        catch (\Exception $err) {
+            DB::rollback();
+            throw $err;
+        }
     }
 
     public function hardDeleteRolePermission(UpdateRolesAndPermissionsRequest $request) {
-        $role_id = $request->id;
-        $permission_id = $request->permission_id;
+        try {
+            DB::beginTransaction();
 
-        $user_role = RolesAndPermissions::withTrashed()->where('role_id', $role_id)->where('permission_id', $permission_id)->first();
-        $user_role->forceDelete();
+            $role_id = $request->id;
+            $permission_id = $request->permission_id;
+            $user = $request->user();
 
-        return response()->json(['status' => '200']);
+            $user_role = RolesAndPermissions::withTrashed()->where('role_id', $role_id)->where('permission_id', $permission_id)->first();
+            
+            $Log = new LogsController;
+            $Log->createLogs('roles_and_permissions', 'hardDelete', $user_role->id, $user_role, null, $user->id);
+
+            $user_role->forceDelete();
+
+            DB::commit();
+
+            return response()->json(['status' => '200']);
+        }
+        catch (\Exception $err) {
+            DB::rollback();
+            throw $err;
+        }
     }
 
     public function softDeleteRolePermission(UpdateRolesAndPermissionsRequest $request) {
-        $role_id = $request->id;
-        $permission_id = $request->permission_id;
+        try {
+            DB::beginTransaction();
 
-        $role_permission = RolesAndPermissions::where('role_id', $role_id)->where('permission_id', $permission_id)->first();
-        $role_permission->deleted_by = $request->user()->id;
-        $role_permission->delete();
-        $role_permission->save();
+            $role_id = $request->id;
+            $permission_id = $request->permission_id;
+            $user = $request->user()->id;
 
-        return response()->json(['status' => '200']);
+            $role_permission = RolesAndPermissions::where('role_id', $role_id)->where('permission_id', $permission_id)->first();
+            $role_permission->deleted_by = $user;
+
+            $Log = new LogsController;
+            $Log->createLogs('roles_and_permission', 'softDelete', $role_permission->id, $role_permission, null, $user);
+
+            $role_permission->delete();
+            $role_permission->save();
+
+            DB::commit();
+
+            return response()->json(['status' => '200']);
+        }
+        catch (\Exception $err) {
+            DB::rollback();
+            throw $err;
+        }
     }
 
     public function restoreDeletedRolePermission(UpdateRolesAndPermissionsRequest $request) {
-        $role_id = $request->id;
-        $permission_id = $request->permission_id;
 
-        $role_permission = RolesAndPermissions::where('role_id', $role_id)->where('permission_id', $permission_id)->first();
+        try {
+            DB::beginTransaction();
 
-        $role_permission->restore();
-        $role_permission->deleted_by = null;
-        $role_permission->save();
+            $user = $request->user()->id;
+            $role_id = $request->id;
+            $permission_id = $request->permission_id;
 
-        return response()->json(['status' => '200']);
+            $role_permission = RolesAndPermissions::where('role_id', $role_id)->where('permission_id', $permission_id)->first();
+
+            $Log = new LogsController();
+			$Log->createLogs('roles_and_permissions', 'restore', $role_permission->id, null, $role_permission, $user);
+
+            $role_permission->restore();
+            $role_permission->deleted_by = null;
+            $role_permission->save();
+
+            DB::commit();
+
+            return response()->json(['status' => '200']);
+        }
+        catch (\Exception $err) {
+            DB::rollback();
+            throw $err;
+        }
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LogsController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
@@ -51,7 +52,6 @@ Route::prefix('ref')->group(function () {
             Route::delete('/{id}', [RoleController::class, "hardDeleteRole"])->middleware('CheckRole:delete-role');
             Route::delete('/{id}/soft', [RoleController::class, "softDeleteRole"])->middleware('CheckRole:delete-role');
             Route::post('/{id}/restore', [RoleController::class, "restoreDeletedRole"])->middleware('CheckRole:restore-role');
-            Route::get('/{id}/story');
 
             Route::get('/{id}/permission', [RolesAndPermissionsController::class, 'getRolePermission'])->middleware('CheckRole:read-role');
             Route::get('/{id}/permission/{permission_id}', [RolesAndPermissionsController::class, 'assignPermissionToRole'])->middleware('CheckRole:update-role');
@@ -68,7 +68,6 @@ Route::prefix('ref')->group(function () {
             Route::delete('/{id}', [PermissionController::class, "hardDeletePermission"])->middleware('CheckRole:delete-permission');
             Route::delete('/{id}/soft', [PermissionController::class, "softDeletePermission"])->middleware('CheckRole:delete-permission');
             Route::post('/{id}/restore', [PermissionController::class, "restoreDeletedPermission"])->middleware('CheckRole:restore-permission');
-            Route::get('permission/{id}/story');
         });
 
     });
@@ -85,6 +84,9 @@ Route::prefix('ref')->group(function () {
         Route::delete('/{id}/role/{role_id}', [UsersAndRolesController::class, "hardDeleteUserRole"])->middleware('CheckRole:delete-user');
         Route::delete('/{id}/role/{role_id}/soft', [UsersAndRolesController::class, "softDeleteUserRole"])->middleware('CheckRole:delete-user');
         Route::post('/{id}/role/{role_id}/restore', [UsersAndRolesController::class, "restoreDeletedUserRole"])->middleware('CheckRole:delete-user');
-        Route::get('/{id}/story');
+    });
+
+    Route::prefix('log')->group(function () {
+        Route::get('{model}/{id}/story', [LogsController::class, "getLogs"]);
     });
 });
