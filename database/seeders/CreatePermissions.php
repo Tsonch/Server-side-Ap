@@ -35,6 +35,10 @@ class CreatePermissions extends Seeder
             ['name' => 'update-permission', 'description' => 'can update permission', 'encryption' => '16', 'created_by' => '1'],
             ['name' => 'delete-permission', 'description' => 'can delete permission', 'encryption' => '17', 'created_by' => '1'],
             ['name' => 'restore-permission', 'description' => 'can restore permission', 'encryption' => '18', 'created_by' => '1'],
+
+            ['name' => 'get-story-user', 'description' => 'can restore permission', 'encryption' => '18', 'created_by' => '1'],
+            ['name' => 'get-story-role', 'description' => 'can restore permission', 'encryption' => '18', 'created_by' => '1'],
+            ['name' => 'get-story-permission', 'description' => 'can restore permission', 'encryption' => '18', 'created_by' => '1'],
         ];
 
         foreach($permissions as $permission) {

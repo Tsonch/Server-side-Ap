@@ -32,6 +32,9 @@ class CreateRoleAndPermission extends Seeder
             ["role_id" => "1", "permission_id" => "16", "created_by" => "1"],
             ["role_id" => "1", "permission_id" => "17", "created_by" => "1"],
             ["role_id" => "1", "permission_id" => "18", "created_by" => "1"],
+            ["role_id" => "1", "permission_id" => "19", "created_by" => "1"],
+            ["role_id" => "1", "permission_id" => "20", "created_by" => "1"],
+            ["role_id" => "1", "permission_id" => "21", "created_by" => "1"],
 
             ["role_id" => "2", "permission_id" => "1", "created_by" => "1"],
             ["role_id" => "2", "permission_id" => "2", "created_by" => "1"],
