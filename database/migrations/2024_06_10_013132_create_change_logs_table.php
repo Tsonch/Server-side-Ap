@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('table_name');
             $table->string('action_name',);
             $table->integer('row_id');
-            $table->text('value_before');
-            $table->text('value_after');
+            $table->text('value_before')->nullable();
+            $table->text('value_after')->nullable();
             $table->integer('created_by');
             $table->timestamps();
         });

@@ -24,7 +24,7 @@ class LogsController extends Controller
     public function getLogs(Request $request) {
         $id = $request->id;
         $model = $request->model;
-        $Logs = ChangeLogs::where('table_name', $model)->where('row_id', $id);
+        $Logs = ChangeLogs::where('table_name', $model)->where('row_id', $id)->get();
 
         if ($Logs) {
             return $Logs;
@@ -56,7 +56,7 @@ class LogsController extends Controller
                     DB::table($table)->where('id', $dataArray['id'])->delete();
                 }
                 DB::table($table)->insert($dataArray);
-                $this->createLogs($table, 'create', $log->row_id, 'null', $current_value, $user->id);
+                $this->createLogs($table, 'create', $log->row_id, null, $value_before, $user->id);
             }
             else {
                 $dataArray = json_decode($value_before, true);
@@ -67,6 +67,8 @@ class LogsController extends Controller
             }
 
             DB::commit();
+
+            return response()->json(['status' => '200']);
 
         } catch (\Exception $err) {
             DB::rollBack();
