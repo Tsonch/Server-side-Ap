@@ -23,12 +23,11 @@ class GitController extends Controller
                 try {
                     $path = "C:\Program Files\Git\bin\git.exe";
                     Log::info('Дата: ' . now() . ' IP:' . $request->ip());
-                    Log::info('Branch checkout:');
-
-                    $output = shell_exec("\"$path\" checkout main");
-                    Log::info($output);
                     Log::info('Fetch All:');
                     $output = shell_exec("\"$path\" fetch --all");
+                    Log::info($output);
+                    Log::info('Branch checkout:');
+                    $output = shell_exec("\"$path\" checkout main");
                     Log::info($output);
                     Log::info('Reset Hard:');
                     $output = shell_exec("\"$path\" reset --hard origin/main");
