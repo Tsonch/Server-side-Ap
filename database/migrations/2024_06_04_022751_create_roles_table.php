@@ -17,7 +17,8 @@ return new class extends Migration
             $table->text('description');
             $table->string('encryption')->nullable()->unique();
             $table->timestamps();
-            $table->integer('created_by');
+            $table->unsignedBigInteger('created_by');
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
             $table->integer('deleted_by')->nullable();
 
             $table->softDeletes();
