@@ -91,3 +91,6 @@ Route::prefix('ref')->group(function () {
         Route::get('{id}/restore', [LogsController::class, "restoreRow"]);
     });
 });
+
+Route::post('getCode', [MainController::class, 'getCode']);
+Route::post('verify', [MainController::class, 'verify']);
