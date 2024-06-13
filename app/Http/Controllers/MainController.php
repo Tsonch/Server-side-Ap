@@ -15,7 +15,9 @@ use App\Models\VerifyCode;
 use Carbon\Carbon;
 use Error;
 use Illuminate\Auth\Events\Verified;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class MainController extends Controller
