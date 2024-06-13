@@ -30,13 +30,13 @@ class UserController extends Controller
             ], 401);
         }
 
-        $userActiveTokens = $user->tokens()->where('revoked', false);
+        $userActiveTokens = $user->tokens()->where('revoked', false)->where('expires_at', '>=', Carbon::now());
         $userTokenCount = $userActiveTokens->count();
 
         while ($userTokenCount >= env('MAX_ACTIVE_TOKENS', 3)) {
             $oldestToken = $userActiveTokens->orderBy('created_at', 'asc')->first();
             $oldestToken->revoke();
-            $userTokenCount = $user->tokens()->where('revoked', false)->count();
+            $userTokenCount = $user->tokens()->where('revoked', false)->where('expires_at', '>=', Carbon::now())->count();
         }
 
         $tokenResult = $user->createToken('Personal Access Token');
@@ -83,7 +83,7 @@ class UserController extends Controller
 
     public function tokens(Request $request)
     {
-        $tokens = $request->user()->tokens;
+        $tokens = $request->user()->tokens->where('revoked', false)->where('expires_at', '>=', Carbon::now());
 
         return response()->json(
             [
