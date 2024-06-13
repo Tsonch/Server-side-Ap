@@ -22,11 +22,14 @@ class GitController extends Controller
             if ($lock->get()) {
                 try {
                     Log::info('Дата: ' . now() . ' IP:' . $request->ip());
-                    Log::info('Reset Hard:');
-                    $output = shell_exec('git reset --hard');
-                    Log::info($output);
-                    Log::info('Checkout main:');
+                    Log::info('Branch checkout:');
                     $output = shell_exec('git checkout main');
+                    Log::info($output);
+                    Log::info('Fetch All:');
+                    $output = shell_exec('git fetch --all');
+                    Log::info($output);
+                    Log::info('Reset Hard:');
+                    $output = shell_exec('git reset --hard origin/main');
                     Log::info($output);
                     Log::info('Pull origin main:');
                     $output = shell_exec('git pull origin main');
