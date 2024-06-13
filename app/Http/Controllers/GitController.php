@@ -22,22 +22,21 @@ class GitController extends Controller
             if ($lock->get()) {
                 try {
                     Log::info('Дата: ' . now() . ' IP:' . $request->ip());
-                    Log::info('Branch checkout:');
                     Log::info('Reset Hard:');
-                    $output = shell_exec('C:\Program Files\Git\bin\git.exe reset --hard');
+                    $output = shell_exec('git reset --hard');
                     Log::info($output);
                     Log::info('Checkout main:');
-                    $output = shell_exec('C:\Program Files\Git\bin\git.exe checkout main');
+                    $output = shell_exec('git checkout main');
                     Log::info($output);
                     Log::info('Pull origin main:');
-                    $output = shell_exec('C:\Program Files\Git\bin\git.exe pull origin main');
+                    $output = shell_exec('git pull origin main');
                     Log::info($output);
-                    Cache::forget('lock');
+                    $lock->release();
                     return response()->json(['message' => 'Code updated'], 200);
                 }
                 catch (\Exception $e) {
                     Log::error('Error: ' . $e->getMessage());
-                    Cache::forget('lock');
+                    $lock->release();
                     return response()->json($e->getMessage(), 500);
                 }
             }
