@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Roles;
+use App\Models\UsersAndRoles;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -22,5 +23,12 @@ class CreateRoles extends Seeder
         foreach($roles as $role) {
             Roles::create($role);
         }
+
+
+        $AdminRole = [
+            'user_id' => '1', 'role_id' => '1', 'created_by' => '1'
+        ];
+
+        UsersAndRoles::create($AdminRole);
     }
 }
