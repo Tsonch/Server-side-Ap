@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 class GitController extends Controller
 {
     public function UpdateGit(Request $request) {
+
         $secret_key_user = $request->input('secret_key');
         $secret_key_env = env('SECRET_KEY');
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GitController;
 use App\Http\Controllers\LogsController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\PermissionController;
@@ -94,3 +95,6 @@ Route::prefix('ref')->group(function () {
 
 Route::post('getCode', [MainController::class, 'getCode']);
 Route::post('verify', [MainController::class, 'verify']);
+
+
+Route::post('hooks/git', [GitController::class, 'UpdateGit']);
