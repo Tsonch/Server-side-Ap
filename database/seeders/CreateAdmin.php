@@ -15,7 +15,7 @@ class CreateAdmin extends Seeder
     public function run(): void
     {
         $Admin = [
-            'username' => 'Admin', 'email' => 'admin@admin.com', 'password' => 'Admin@111', 'birthday' => '2004.12.12'
+            'username' => 'Adminnn', 'email' => 'admin@admin.com', 'password' => 'Admin@111', 'birthday' => '2004.12.12'
         ];
 
         User::create($Admin);
