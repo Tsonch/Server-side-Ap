@@ -39,6 +39,8 @@ class LogsController extends Controller
         $user = $request->user();
 
         try {
+            DB::beginTransaction();
+
             $log = ChangeLogs::where('id', $log_id)->first();
             $table = $log->table_name;
             $current_value = $log->value_after;
