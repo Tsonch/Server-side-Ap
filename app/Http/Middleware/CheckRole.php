@@ -25,16 +25,19 @@ class CheckRole
         if (Auth::user()) {
             $user_roles = User::find(Auth::id())->roles();
 
-            $permission_id = Permissions::where('name', $permission)->first()->id;
+            $permission = Permissions::where('name', $permission)->first();
+            if ($permission == null) {
+                return response()->json(['error' => 'Forbidden'], 403);
+            }
+            $permission_id = $permission->id();
             $permission_roles = RolesAndPermissions::where('permission_id', $permission_id)->get();
 
             foreach ($user_roles as $role) {
                 if ($role->id == 1) {
                     return $next($request);
-                }
-                else {
-                    foreach($permission_roles as $permission_role) {
-                        if($permission_role->role_id == $role->id) {
+                } else {
+                    foreach ($permission_roles as $permission_role) {
+                        if ($permission_role->role_id == $role->id) {
                             return $next($request);
                         }
                     }
